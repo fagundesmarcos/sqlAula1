@@ -1,0 +1,844 @@
+
+
+***********
+** MySQL **
+***********
+
+INTRODUÇÃO DO SQL UTILIZANDO O MYSQL
+
+
+-------------------------------------------------------------------------------------------------------
+Como visualizar os dados de uma tabela;
+Como segregar a seleção de dados;
+A usar as condições de maior e menor na seleção de dados da tabela;
+Como filtrar dados através de datas.
+Como implementamos filtros compostos.
+
+-------------------------------------------------------------------------------------------------------
+
+
+CREATE database ´nomeDaDatabase´ - assim vc cria um schema(base de dados).
+
+DROP ´nomeDaDatabase´ - assim vc exclui um schema / base de dados.
+
+
+para acessar uma tabela no DB (database) utilizamos o comando:
+
+SELECT * FROM CITY
+
+nesse comando teremos acesso a tabela ´CITY´ onde o DB estara selecionado.
+selecionar *(todos) de CITY.
+
+
+Podemos utilizar esses comandos no prompt, mas nessas anotações vamos fazer pelo Workbench, que seria o programa em si.
+
+
+
+
+/////
+
+CRIANDO TABELA
+
+/////
+
+
+******************************************************************************************************
+******************************************************************************************************
+Tipos:      |  valor em Bytes | <valor Signed  |  <valor Unsigned | >valor Signed | >valor Unsigned  |
+TINYINT     |        1        |      -128      |        0         |      127      |      255         |
+SMALLINT    |        2        |     -32768     |        0         |     32767     |     65535        |
+MEDIUMINT   |        3        |    -8388608    |        0         |    8388607    |    16777215      |
+INT         |        4        |  -2147483648   |        0         |  2147483647   |   4294967295     |
+BIGINT      |        5        |     -2xE63     |        0         |    2xE63-1    |    2xE64-1       |
+******************************************************************************************************
+******************************************************************************************************
+
+
+Propriedade UNSIGNED não permite sinal numerico (+ ou -).
+
+
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+*** Ponto Flutuante.
+
+FLOAT - Precisão simples (4 bytes)
+DOUBLE - Precisão dupla (8 bytes)
+
+Se a gente declarar um campo FLOAT(7,4) [ 7 = numero de numeros || 4 = numeros após a virgula]
+
+teremos o seguinte exemplo:
+
+Numero declarado: 999,00009
+vamos obter o valor armazenado = 999,0001
+
+O numero será arredondado, pois declaramos 4 números apos a virgula.
+
+-------------------------------------------------------------------------------------------------------
+
+
+*** FIXOS
+
+Decimal ou Numeric
+
+Tamanho de até 65 digitos
+
+Vamos especificar o numero de digitos e o numero de casas decimais.
+
+Exemplo: Se a gente declarar um campo DECIMAL(5,2) poderemos armazenar valores somente entre -999,99 e 999,99 Pois declaramos o numero 5 como numero de numeros, e 2 como numeros depois da virgula, ou numeros decimais.
+
+-------------------------------------------------------------------------------------------------------
+
+*** UNICO
+BIT
+
+Tamanho de ate 64 Bits
+Exemplo: BIT(1) - pode ser 1 ou 0
+
+BIT(2) - pode ser 01, 10, 00, 11
+
+
+-------------------------------------------------------------------------------------------------------
+
+*** SIGNED ou UNSIGNED - vai possuir ou não sinal no numero (+-).
+
+- ZEROFILL - preenche com 0 os espaços em branco.
+Por exemplo: INT(4) - Se armazenamos o numero 5, ele será gravado como 0005, pois falamos que queremos 4 numeros de numero.
+
+- AUTO_INCREMENT - Sequencia auto incrementada.
+Ex: 1,2,3,4,5.....
+
+Não se inclui dados nesse campo.
+
+Pode ser crescente de 1 em 1 ou 2 em 2, ou 3 em 3 e por ai vai, a gente que decide.
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+*** ERROS de OUT OF RANGE:
+Vão ocorrer quando os valores ultrapassam os limites.
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+*** DATA E HORA
+
+DATE - vai do 1000-01-01 ate 9999-12-31.
+
+DATETIME - 1000-01-01 00:00:00 até 9999-12-31 23:59:59
+
+TIMESTAMP - 1970-01-01 UTC até 2038-01-19 UTC
+(armazena fuso horarios)
+
+TIME - -838:59:59 e 839:59:59
+
+YEAR - 1901 - 2155	(pode ser expresso no formato 2 ou 4 digitos)
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+** STRINGS
+
+- CHAR - cadeia de caracteres com valor FIXO de 0 a 255
+
+- VARCHAR - cadeia de caracteres com valor VARIADO de 0 a 255
+
+CHAR(4) - "aa" - vai gravar "  aa" (com 2 espaços vazios.)
+
+VARCHAR(4) - "aa" - "aa"
+
+se eu pedir pra gravar "aa" cada um grava de um jeito,
+O CHAR com 2 espaços vazios que em alguns casos pode ocupar memoria no programa desnecessariamente, e o VARCHAR vai gravar do jeito que pedimos.
+
+
+-------------------------------------------------------------------------------------------------------
+
+** - BINARY - cadeia de caracteres com valor FIXO de 0 a 255. Expressos em binário.
+
+- VARBINAY - cadeia de caracteres com valor VARIADO de 0 a 255. Expressos em binário.
+
+Obs: os valores que gravam são em Bytes e não em caracteres como no CHAR e no VARCHAR (que são em caracteres)
+
+
+- BLOB - binario longo
+º TINYBLOB
+º BLOB
+º MEDIUMBLOB
+º LONGBLOB
+
+- TEXT - texto longo
+º TINYTEXT
+º TEXT
+º MEDIUMTEXT
+º LONGTEXT
+
+-------------------------------------------------------------------------------------------------------
+
+** ENUM
+- permite armazenar uma lista pre-definida de valores.
+
+Size ENUM('x-small', 'small', 'medium', 'large', 'x-large')
+
+
+Atributo dos campos Strings:
+SET e COLLATE - cadeia de caracteres.
+ex: UTF-8
+
+tipo de conjunto de caracteres que serão suortados.
+
+
+-------------------------------------------------------------------------------------------------------
+
+**SPACIAL:
+
+º GEOMETRY
+º POINT
+º LINESTRING
+º POLYGON
+
+são representações geometricas dentro do mapa.
+
+
+-------------------------------------------------------------------------------------------------------
+*******************************************************************************************************
+*******************************************************************************************************
+
+
+
+**********************************
+
+///////
+
+CRIANDO A PRIMEIRA TABELA. - PASSO A PASSO.
+
+//////
+**********************************
+
+
+
+Apos criar o DB, com ele selecionado, vamos no primeiro icone em baixo de 'file' um papel escrito SQL com um + embaixo (create a new SQL table)
+
+primeira linha colocamos o comando :
+
+CREATE TABLE 'nome_da_tabela'.
+
+entre parenteses e separado por virgula vamos adicionando os campos. como no exemplo abaixo:
+
+********************************
+CREATE TABLE tbCliente
+
+(CPF VARCHAR(11),
+NOME VARCHAR(100),
+ENDERECO1 VARCHAR(150),
+ENDERECO2 VARCHAR(150),
+BAIRRO VARCHAR(50),
+CIDADE VARCHAR(50),
+ESTADO VARCHAR(50),
+CEP VARCHAR(8),
+IDADE SMALLINT,
+DATA_NASCIMENTO DATE,
+SEXO VARCHAR(1),
+LIMITE_CREDITO FLOAT,
+VOLUME_COMPRA FLOAT,
+PRIMEIRA_COMPRA BIT(1))
+
+********************************
+
+Lembrando de colocar apos o nome do campo o tipo que ele vai ser(VARCHAR, CHAR, FLOAT, DOUBLE entre outros.)
+[lembrando que o cada um significa esta explicado acima.]
+
+
+Depois que vc colocou todos os campos que deseja, fechar o parenteses e clicar no raiozinho. Pronto, primeira tabela criada.
+
+
+
+/////
+
+Apos criar a tabela de cliente, criamos uma tabela de vendedores:
+
+*****************************
+
+CREATE TABLE TBVENDEDORES
+
+(MATRICULA varchar(5), 
+NOME varchar(100), 
+PERCENTUAL_COMISSAO float)
+
+*****************************
+
+
+/////
+
+APAGANDO TABELA
+
+/////
+
+
+caso queira apagar uma tabela, por exemplo a dos vendedores, temos 2 opçoes:
+
+1º - clicar com o botao direito do mouse sobre a tabela e achar a opção DELETE TABLE ou DROP TABLE.
+
+2º - por comando, escrever DROP TABLE TBVENDEDORES;
+
+simples assim de apagra uma tabela, mas temos que tomar muito cuidado, e ter muitacerteza que é para apagar a tabela, pois depois que apagar a tabela, não tem mais volta.
+Alguns comandos como criar e excluir tabela, não são todas as pessoas que tem essa autorização, geralmente tem uma pessoa responsável no time só para isso ou com essa função.
+OU SEJA - ****** CUIDADO AO APAGAR TABELAS *****
+
+
+
+
+**********************************
+/////
+INSERIR DADOS NO BANCO DE DADOS
+/////
+**********************************
+
+Codigo:
+
+INSERT INTO 'nome da tabela'.
+
+ex: na tabela de produtos utilizaremos o codigo/comando:
+
+INSERT INTO TBPRODUTOS (
+
+ou como no exemplo acima usamos vendedores, utilizaremos o codigo:
+
+INSERT INTO TBVENDEDORES (
+
+esse é o comando principal, abaixo veremos o que colocar nos parenteses ().
+
+lembrando que abaixo veremos os numeros entre aspas, pois eles foram classificados como VARCHAR que seria uma string, pois em alguns lugares podemos ver codigos do produto ou ID entre outras coisas misturando letras e numeros, por isso é uma boa pratica definirmos a maioria das coisas em uma tabela como VARCHAR.
+
+Abaixo veremos o codigo para inserir, utilizamos o INSERT INTO abrimos parenteses e colocamos os nomes dos campos,, fechamos parenteses e colocamos o comando VALUES, dentro de VALUES precisamos nos atentar em manter a ordem dos elementos listados nos INSERT INTO, pois podemos inserir os valores em campos errados.
+
+CODIGO COMPLETO DE COMO INSERIR DADOS NA TABELA:
+
+*******************************************************
+
+INSERT INTO TBPRODUTO (
+CODIGO, NOME, EMBALAGEM, TAMANHO, MALTE, PRECO) VALUES (
+'4381273', 'SKOL', 'LATA', '290ML', 'PILSEN', 2.97)
+
+*******************************************************
+
+
+Para ferificarmos se o produto foi inserido na tabela, podemos utilizar o comando:
+
+SELECT * FROM tbproduto;
+
+Para adicionarmas vários produtos na tabela, podemos utilizar varios INSERTs com a separação com ';'
+ex:
+*************************************************************
+
+INSERT INTO TBPRODUTO (
+CODIGO, NOME, EMBALAGEM, TAMANHO, MALTE, PRECO) VALUES (
+'4381273', 'SKOL', 'LATA', '290ML', 'PILSEN', 2.97);
+INSERT INTO TBPRODUTO (
+CODIGO, NOME, EMBALAGEM, TAMANHO, MALTE, PRECO) VALUES (
+'4381273', 'SKOL', 'VIDRO', '600ML', 'DUPLO MALTE', 3.34)
+
+*************************************************************
+
+
+/////////
+VAMOS ATUALIZAR ALGO NA TABELA (PODE SER QUE COLOCAMOS ERRADO, OU QUE O PREÇO MUDOU).
+////////
+
+
+
+Digamos que o preço da SKOL 290ml foi para 3 reais.
+
+utilizaremos o código:
+
+UPDATE tbproduto SET PRECO = 3.00
+
+caso tenha mais alguma coisa para mudar, podemos continuar escrevendo o nome do campo = o valor correto separando por ','
+
+exemplo:
+UPDATE tbproduto SET PRECO = 3.00, EMBALAGEM = VIDRO
+
+Mas isso não é o suficiente, não tem como saber de qual produtos estamos falando apenas com esses comandos, por isso vamos colocar um filtro.
+
+***********************************
+
+UPDATE tbproduto SET PRECO = 3.00
+WHERE CODIGO = '4381273';
+
+***********************************
+
+O que vai acontecer? o código vai mudar o preco do produto que esta com o codigo listado, por isso é muito importante cada produto ter um código diferente.
+
+Lembrando que pode dar erro, pois esta ligado com a chave primária que vamos ver mais pra frente, por enquanto deu certo, pois desabilitamos no 'edit/preferences/sqleditor' desmarcamos onde fala (Safe Updates (rejects UPDATES and DELETEs with no restrictions)).
+Só podemos fazer esse tipo de alteração quando o filtro for chave primária, mas não colocamos o códig como chave primária pois ainda nao vimos como fazer isso, vamos ver mais pra frente.
+
+
+
+/////////////
+
+APAGANDO REGISTRO DA TABELA
+
+/////////////
+
+--------------------------
+
+Vamos utilizar o comando DELETE FROM.
+ps: Não podemos confundir com o DROP, o DROP utilizamos para apagar dados do SQL, tabela inteira, banco de dados, indices, chaves primárias, etc.
+O DELETE vamos utilizar para apagar dados DA TABELA.
+
+--------------------------
+
+exemplo:
+Caso a gente queira apagar a skol que a gente modificou o preco. (suponhamos que nao vendemos mais esse produto ou que acabou e depois lanço novamente)
+
+CÓDIGO:
+
+***************************
+DELETE FROM tbproduto 
+WHERE CODIGO = '4381273'
+
+***************************
+
+Não podemos esquecer de colocar o WHERE, pois se não vai deletar todas as informações da tabela, pois esta sem filtro, correto? 
+
+
+
+////////////////////////
+
+COLOCANDO CHAVE PRIMÁRIA
+
+////////////////////////
+
+
+
+Adicionando uma chave primária em uma tabela ja criada.
+Vamos adicionar a chave primaria na tabela de produtos no campo CODIGO.
+
+
+Vamos utilizar o ALTER TABLE
+
+CODIGO:
+
+***************************************
+
+ALTER TABLE tbproduto ADD PRIMARY KEY (CODIGO);
+
+***************************************
+
+Pronto, chave primaria colocada no campo CODIGO.
+
+A boa pratica diz que sempre que criar uma tabela expecificar a CHAVE PRIMÁRIA.
+
+Depois desse comando, não consigo mais incluir outro produto com o mesmo código, entao temos que tomar cuidado onde colocaremos a chave primaria.
+Legal colocarmos essa chave sempre em codigos/ cpfs e outros compos que não podemos ter nada iguais.
+
+
+////////////////
+
+CRIANDO COLUNA NOVA
+
+////////////////
+
+
+
+Caso a gente esqueça uma coluna, podemos adiciona-la utilizando codigos.
+
+Por exemplo, vamos dizer que criamos uma tabela com os seguintes dados:
+
+*******************************
+CREATE TABLE tbCliente       - criar tabela
+
+(CPF VARCHAR(11),
+NOME VARCHAR(100),
+ENDERECO1 VARCHAR(150),
+ENDERECO2 VARCHAR(150),
+BAIRRO VARCHAR(50),
+CIDADE VARCHAR(50),
+ESTADO VARCHAR(50),
+CEP VARCHAR(8),
+IDADE SMALLINT,
+SEXO VARCHAR(1),
+LIMITE_CREDITO FLOAT,
+VOLUME_COMPRA FLOAT,
+PRIMEIRA_COMPRA BIT(1))
+
+*******************************
+
+digamos que essa tabela esta sendo usada e esquecemos de inserir a coluna de data de nascimento. Como faremos?
+
+podemos incluir essa coluna com o seguinte código:
+
+*************************************************************
+
+ALTER TABLE tbcliente ADD COLUMN (DATA_NASCIMENTO DATE);
+
+*************************************************************
+// alter table 'nomedatabela' ADD COLUMN ('nome do campo' tipo) 
+o tipo no caso acima é o tipo DATE que vimos la em cima.
+
+
+
+
+A TABELA FICARÁ ASSIM:
+
+*******************************
+CPF VARCHAR(11),
+NOME VARCHAR(100),
+ENDERECO1 VARCHAR(150),
+ENDERECO2 VARCHAR(150),
+BAIRRO VARCHAR(50),
+CIDADE VARCHAR(50),
+ESTADO VARCHAR(50),
+CEP VARCHAR(8),
+IDADE SMALLINT,
+SEXO VARCHAR(1),
+LIMITE_CREDITO FLOAT,
+VOLUME_COMPRA FLOAT,
+PRIMEIRA_COMPRA BIT(1),
+DATA_NASCIMENTO DATE
+
+*******************************
+
+
+Seria uma boa prática adicionarmos um campo como primário, vamos utilizar o campo CPF pois não pode haver dois CPFs iguais.
+
+ADD TABLE tbcliente ADD PRIMARY KEY (CPF);
+
+
+
+
+
+/////
+
+Vamos inserir, igual vimos la em cima.
+
+
+*******************************************
+
+INSERT INTO tbcliente(
+CPF, NOME, ENDERECO1, ENDERECO2, BAIRRO, CIDADE, ESTADO, CEP, IDADE, SEXO, LIMITE_CREDITO, VOLUME_COMPRA, PRIMEIRA_COMPRA, DATA_NASCIMENTO) 
+VALUES('32187690890', 'ANTONIO CARLOS GONSALVES', 'RUA PIRIQUITO Nº 210', '', 'JARDINÓPOLIS', 'SAO PAULO', 'SAO PAULO', '03498-128', 30, 'M', 10000.00, 2000, 0, 
+'1991-05-27');
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+CPF ate ENDERECO1, tranquilo, tudo dentro de aspas simples, pois se trata de varchar.
+ENDERECO2, '' , fazio, não tem, mas preciso expecificar, pois mencionei ele no codigo do INSERT.
+bairro ate cep, tranquilo.
+IDADE, sem aspas simples, pois se trata de numero.
+SEXO somente M entre aspas simples pois é um VARCHAR de 1 caracter.
+LIMITE DE CREDITO E VOLUME DE COMPRA, numeros FLOAT.
+PRIMEIRA_COMPRA esta em Bit, só podemos utilizar 0 e 1, colocamos 0 pois suponhamos que ele ja tenha feito alguma compra. (0 = falso / 1 = verdadeiro)
+DATA_NASCIMENTO = vamos utilizar entre aspas simples, utilizando a boa pratica do SQL = ANO-MES-DIA.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+**********************************
+
+///////
+
+CONSULTANDO A TABELA
+
+//////
+**********************************
+
+
+SELECT * FROM tbcliente - vai me mostrar a tabela inteira
+SELECT CPF, NOME FROM tbcliente - vai me mostrar a tabela apenas com os CPFs e nomes dos cliente
+
+utilizamos o '*' para melhorar nossa escrita, pois seria a mesma coisa que escrever todos os campos da tabela.
+
+Podemos limitar o numero de "mostragens" tbn, com o comando LIMIT
+
+****************************************************************
+SELECT * FROM tbcliente LIMIT 5;
+****************************************************************
+esse comando vai me mostrar apenas 5 registros de clientes
+
+
+Podemos mudar o nome da coluna apenas para pesquisa com o 'as', 
+
+****************************************************************
+SELECT CPF AS CPF_CLIENTE, NOME AS NOME_CLIENTE FROM tbcliente;
+****************************************************************
+
+
+nesse comando ao inves de aparecer no resutado de busca CPF e NOME (que foi o nome que a gente deu pras colunas), vai aparecer CPF_CLIENTE e NOME_CLIENTE.
+
+
+
+
+Podemos tbn pedir determinadas colunas fora da ordem, por exemplo:
+
+
+****************************************************************
+SELECT NOME, CPF, SEXO, DATA_NASCIMENTO, IDADE FROM tbcliente;
+****************************************************************
+
+Nesse comando, ele vai me mostrar na ordem que eu pedir.
+
+------------------------
+
+
+
+
+
+
+
+
+**********************************
+
+///////
+
+FILTRANDO REGISTROS
+
+//////
+
+**********************************
+
+
+Podemos filtrar um produto, ou algo que queremos com o WHERE que uzamos para alterar alguns dados apenas no item falado.
+
+UPDATE tbproduto SET PRECO = 3.00
+WHERE CODIGO = '4381273';
+
+
+Vamos utilizar esse mesmo metodo.
+
+**********************************
+SELECT * FROM tbproduto WHERE CODIGO='4381273'
+**********************************
+
+
+ele vai me retornar apenas o produto com esse codigo, caso o codigo seja a chave primaria, vamos ter exatamente um item.
+Podemos fazer isso com codigo do produto, com o cpf do cliente e tbn podemos ver quais produtos temos com determinada caracteristica, por exemplo, latas de 350ml.
+
+
+
+
+
+
+
+*********************************
+
+WHERE
+
+*********************************
+
+
+
+
+
+
+
+podemos utilizar o WHERE em mais um caso.
+
+Digamos que a gente queira alterar algo, digamos que nao teremos mais garrafa de vidro, mundialmente agora venderemos tudo em acrilico.
+Como fazer para mudar um por um?
+
+
+
+
+colocamos o seguinte comando, onde alteraremos todos, 
+
+***************************************************************************************************
+UPDATE tbproduto SET EMBALAGEM = 'ACRILICO' WHERE EMBALAGEM ='VIDRO';
+***************************************************************************************************
+
+Depois desse comando, todos os produtos que estavam descritos com embalagem de VIDRO passarão a ter a embalagem de acrilico.
+Se eu não coloco o WHERE ou esqueço de coloca-lo, TOOOODOS, TOOODOS os produtos passarão a ser com embalagens de acrilico, não só os de VIDRO como nós queriamos.
+
+
+
+--------------------------------------------------------------------------------------
+
+Vamos filtrar com referencia a algo, maior ou menor que...
+Por exemplo clientes maiores de 18 anos, ou clientes menores de 18 anos.
+
+
+Não tem segredo, vamos utilizar a lógica.
+Se eu procuro alguem com 18 anos, eu utilizo no comando o sinal de =, se eu preciso filtrar quem tem mais de 18, eu utilizo o sinal de >
+ex:
+
+*******************************************
+SELECT * FROM tbclientes WHERE IDADE > 18;
+*******************************************
+
+Com esse comando vamos filtrar todos os clientes que são  maiores de 18. Se eu quiser filtrar os menores de 18 eu utilizo o sinal de <:
+
+*******************************************
+SELECT * FROM tbclientes WHERE IDADE < 18;
+*******************************************
+
+E se eu quiser os maiores de 18 incluindo os que tem 18?
+>=
+
+*******************************************
+SELECT * FROM tbclientes WHERE IDADE >= 18;
+*******************************************
+
+Caso eu queiro selecionar todas as idades MENOS os que tem 18?
+<>
+
+*******************************************
+SELECT * FROM tbclientes WHERE IDADE <> 18;
+*******************************************
+
+////////////
+
+e se eu mandar o comando pra filtrar textos? Por exemplo o nome de alguem? sera que da certo?
+Da sim, pois no SQL existe uma ordem interna não só dos numeros, mas das letras, e essa ordem é a ordem alfabetica, entao para o MySQL o 'B' é maior que 'A', o 'C' é maior que o 'B' e por ai vai.
+Entao se pesquisarmos por exemplo com o código abaixo,
+
+*********************************************************
+SELECT * FROM tbclientes WHERE NOME > 'VERA SILVA COSTA';
+*********************************************************
+
+Vai aparecer os nomes cujo as letras são maiores, no meu caso, vai aparecer o no,me da 'YASMIN PACHECO FAGUNDES'. 
+Pois o 'Y' é maior que 'V'.
+
+Ele utiliza a primeira letra, caso as duas sejam iguais, pula pra segunda, caso a segunda seja igual, pula pra terceira, até achar uma letra diferente e fazer a comparação.
+
+EXEMPLO:
+FERNANDO  /  FATIMA
+
+F = F 
+E > A
+
+entao se eu pesquisar NOME > FERNANDO o nome da FATIMA não entraria na lista.
+
+
+Lembrando que podemos utilizar todos os comando que vimos para numeros. <, >, =, <=, >= e <>...
+
+
+
+==================================
+
+Caso eu tente filtrar algo com o FLOAT, eu não vou conseguir, pois o float é um ponto flutuante, o SQL não consegue pegar o numero exato.
+Seria mais facil utilizar o tipo DECIMAL, o FLOAT conseguimos filtar só utilizando o > ou <.
+Não vamos conseguir usar o = pois ele não acha o numero exato.
+
+==================================
+
+
+/////
+
+BETWEEN
+
+/////
+
+
+
+Caso eu realmente precise achar o produto com o preco 'x' e esse preço seja um FLOAT podemos utilizar o seguinte comando:
+
+Vamos falar que o preço que estou procurando seja 16.008.
+
+
+**************************************************************
+SELECT * FROM tbproduto WHERE PRECO BETWEEN 16.007 AND 16.009;
+**************************************************************
+
+
+
+====================================================================================================
+
+Podemos filtrar por data de nascimento tbn, nesse caso o comando seria igual aos que vimos.
+Mas caso a gente queira ver quem nasceu no ano 'x' podemos fazer o comando:
+
+
+***********************************************************
+SELECT * FROM tbcliente WHERE YEAR(DATA_NASCIMENTO) = 1993;
+***********************************************************
+
+Podemos tbn filtrar por mes, caso eu queira mandar um cartao de aniversario, por exemplo para todos que nasceram em janeiro:
+
+
+***********************************************************
+SELECT * FROM tbcliente WHERE MONTH(DATA_NASCIMENTO) = 01;
+***********************************************************
+
+
+
+====================================================================
+
+FILTRO COMPOSTO
+
+
+-----
+
+Lembra que utilizamos o BETWEEN antes? entaõ ele é um filtro composto, podemos utilizar um filtro expecifico e/ou um composto, para selecionar algo mais expecifico.
+POr exemplo, podemos usar o seguinte comando:
+
+***********************************************************
+SELECT * FROM tbclientes WHERE IDADE >= 18 AND IDADE <= 22;
+***********************************************************
+
+Nesse caso vamos utilizar 2 filtros no mesmo comando.
+
+E podemos ir acressentando filtros com o AND
+
+
+************************************************************************
+SELECT * FROM tbclientes WHERE IDADE >= 18 AND IDADE <= 22 AND SEXO = 'M'
+************************************************************************
+
+POR EXEMPLO..
+
+Podemos ir acrescentando os 'AND' para irmos aprimorando os filtros.
+
+
+
+Podemos tbn utilizar a palavra OR que significa OU.
+
+Por exemplo:
+
+******************************************************************************
+SELECT * FROM tbcliente WHERE CIDADE = 'Rio de Janeiro' OR BAIRRO = 'Jardins';
+******************************************************************************
+
+Nesse comando ele vai me mostrar os dois, os que moram no Rio de Janeiro e os que moram no Jardins em SP.
+Se eu tivesse utilizando o AND ele nao me mostraria ninguem, pois nao ia juntar os filtros, nao existe Jardins no RJ.
+
+
+
+==================================================================================================================
+
+LEMRANDO QUE ESSES FILTROS PODEMOS TBN UTILIZAR NOS COMANDOS DE DELETE E UPDATE.
+
+
+
+
+
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+**************************************************************MARCOS PAULO PERNA FAGUNDES**************************************************************************
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+===================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
